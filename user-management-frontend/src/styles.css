@@ -1,0 +1,28 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/* Styles for the overall layout */
+.app-container {
+    display: flex;
+    height: 100vh; /* Full viewport height */
+}
+  
+/* Sidebar styling */
+.sidebar-container {
+  width: 30%;
+  max-width: 300px; /* Maximum width for the sidebar */
+  min-width: 200px; /* Minimum width for the sidebar */
+  height: 100vh; /* Full viewport height */
+  background-color: #263238; /* Sidebar color */
+  /* ... other sidebar styles ... */
+}
+
+/* Main content area styling */
+.main-content {
+  flex-grow: 1;
+  background-color: #f0f0f0; /* Light background for the content */
+  overflow-y: auto; /* Scrollable content */
+  padding: 20px;
+}
+  

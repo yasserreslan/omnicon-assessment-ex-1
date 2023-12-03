@@ -24,72 +24,72 @@ app.use(bodyParser.json());
 
 */
 
-app.post('/register', authenticateToken, async (req, res) => {
-    try {
+// app.post('/register', authenticateToken, async (req, res) => {
+//     try {
 
-        // Validate the input from request body
-        const { username, password } = req.body;
+//         // Validate the input from request body
+//         const { username, password } = req.body;
 
-        if (!username || !password) {
-            return res.status(400).json({ error: 'Username and password are required' });
-        }
+//         if (!username || !password) {
+//             return res.status(400).json({ error: 'Username and password are required' });
+//         }
 
-        // Check if the username already exists
-        const userExists = await pool.query('SELECT * FROM admin_user WHERE username = $1', [username]);
-        if (userExists.rows.length > 0) {
-            return res.status(400).json({ error: 'Username already exists' });
-        }
+//         // Check if the username already exists
+//         const userExists = await pool.query('SELECT * FROM admin_user WHERE username = $1', [username]);
+//         if (userExists.rows.length > 0) {
+//             return res.status(400).json({ error: 'Username already exists' });
+//         }
 
-        // Hash the password
-        const saltRounds = 10;
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
+//         // Hash the password
+//         const saltRounds = 10;
+//         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-        // Insert the new admin user into the database
-        const newUser = await pool.query(
-            'INSERT INTO admin_user (username, password) VALUES ($1, $2) RETURNING *',
-            [username, hashedPassword]
-        );
+//         // Insert the new admin user into the database
+//         const newUser = await pool.query(
+//             'INSERT INTO admin_user (username, password) VALUES ($1, $2) RETURNING *',
+//             [username, hashedPassword]
+//         );
 
-        res.sendStatus(201);
+//         res.sendStatus(201);
         
 
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
+//     } catch (err) {
+//         console.error(err.message);
+//         res.status(500).json({ error: 'Internal server error' });
+//     }
+// });
 
 
 
-/*  login Endpoint:
-    - Accepts username and password.
-    - Queries the database for the username.
-    - If not found, returns 401 Unauthorized.
-    - If found, compares the provided password with the stored hashed password.
-    - If the password matches, generates and returns a JWT.
-    - If it doesn't match, returns 401 Unauthorized.
-*/
+// /*  login Endpoint:
+//     - Accepts username and password.
+//     - Queries the database for the username.
+//     - If not found, returns 401 Unauthorized.
+//     - If found, compares the provided password with the stored hashed password.
+//     - If the password matches, generates and returns a JWT.
+//     - If it doesn't match, returns 401 Unauthorized.
+// */
 
-app.post('/login', async (req, res) => {
-    try {
-        const { username, password } = req.body;
-        const user = await pool.query('SELECT * FROM admin_user WHERE username = $1', [username]);
+// app.post('/login', async (req, res) => {
+//     try {
+//         const { username, password } = req.body;
+//         const user = await pool.query('SELECT * FROM admin_user WHERE username = $1', [username]);
 
-        if (user.rows.length > 0) {
-            const validPassword = await bcrypt.compare(password, user.rows[0].password);
-            if (!validPassword) return res.status(401).send('Invalid Credentials');
+//         if (user.rows.length > 0) {
+//             const validPassword = await bcrypt.compare(password, user.rows[0].password);
+//             if (!validPassword) return res.status(401).send('Invalid Credentials');
 
-            // const token = jwt.sign({ id: user.rows[0].id }, { key: fs.readFileSync('private.pem'), passphrase: 'yourPassphrase' }, { algorithm: 'RS256', expiresIn: '1h' });
-            const token = generateToken({ username: user.username });
-            res.json({ token });
-        } else {
-            res.status(401).send('Invalid Credentials');
-        }
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server Error');
-    }
-});
+//             // const token = jwt.sign({ id: user.rows[0].id }, { key: fs.readFileSync('private.pem'), passphrase: 'yourPassphrase' }, { algorithm: 'RS256', expiresIn: '1h' });
+//             const token = generateToken({ username: user.username });
+//             res.json({ token });
+//         } else {
+//             res.status(401).send('Invalid Credentials');
+//         }
+//     } catch (err) {
+//         console.error(err.message);
+//         res.status(500).send('Server Error');
+//     }
+// });
 
 // Get all users
 app.get('/users', async (req, res) => {
@@ -105,7 +105,7 @@ app.get('/users', async (req, res) => {
 
 
 // Add a new user
-app.post('/users',authenticateToken, async (req, res) => {
+app.post('/users', async (req, res) => {
     try {
         const { username, email, password } = req.body;
         const newUser = await pool.query(
@@ -123,7 +123,7 @@ app.post('/users',authenticateToken, async (req, res) => {
 // Update a user
 /* Update the user based on the fields thatt are passed in the request */
 
-app.put('/users/:id',authenticateToken, async (req, res) => {
+app.put('/users/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const { username, email, password } = req.body;
@@ -155,6 +155,7 @@ app.put('/users/:id',authenticateToken, async (req, res) => {
         // Execute the query
         const updateUser = await pool.query(query, params);
         res.json(updateUser.rows[0]);
+
     } catch (err) {
         console.error(err.message);
         res.status(500).json({ error: err.message });
@@ -164,7 +165,7 @@ app.put('/users/:id',authenticateToken, async (req, res) => {
 
 
 // Delete a user
-app.delete('/users/:id',authenticateToken, async (req, res) => {
+app.delete('/users/:id', async (req, res) => {
     try {
         const { id } = req.params;
         await pool.query('DELETE FROM users WHERE id = $1', [id]);
@@ -177,5 +178,7 @@ app.delete('/users/:id',authenticateToken, async (req, res) => {
 });
 
 app.listen(3001, () => {
+    console.log(generateToken({username:"admin"}))
     console.log('Server has started on port 3001');
 });
+

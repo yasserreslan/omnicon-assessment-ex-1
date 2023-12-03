@@ -1,0 +1,38 @@
+.sidebar-containers {
+    width: 20%;
+    height: 100vh;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #263238; /* Deep blue-grey color */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); /* Add shadow for depth */
+    overflow-x: hidden;
+    transition: 0.5s; /* Smooth transition for hover effects */
+  }
+  
+  .mat-nav-list a {
+    padding: 15px 20px;
+    text-decoration: none;
+    font-size: 20px;
+    color: #CFD8DC; /* Lighter text color for contrast */
+    display: block;
+    transition: 0.3s; /* Smooth transition for hover effects */
+  }
+  
+  .mat-nav-list a:hover {
+    color: #FFC107; /* Bright color on hover */
+    background-color: #37474F; /* Slightly darker background on hover */
+    margin-left: 15px; /* Shift text to the right on hover */
+  }
+  
+  /* Optional: Add a brand or title to the top of the sidebar */
+  .sidebar-title {
+    padding: 20px;
+    text-align: center;
+    background-color: #546E7A; /* Slightly different color for the header */
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
