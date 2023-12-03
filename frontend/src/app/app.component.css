@@ -1,0 +1,15 @@
+.container {
+    display: flex;
+    flex-direction: row; /* Align children horizontally */
+    /* width: 100%; Take full width of the container */
+  }
+  
+app-sidebar {
+    flex: 0 0 200px; /* Adjust width as needed, 'flex: 0 0 Xpx' ensures that sidebar doesn't grow or shrink */
+
+}
+  
+.router-component {
+    flex-grow: 1; /* Takes up the remaining space */
+  }
+  
