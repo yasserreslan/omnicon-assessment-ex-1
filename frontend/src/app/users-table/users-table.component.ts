@@ -3,11 +3,16 @@ import { HttpClient } from '@angular/common/http';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-users-table',
   standalone: true,
-  imports: [HttpClientModule,CommonModule,MatTableModule],
+  imports: [HttpClientModule,CommonModule,MatTableModule,ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule],
   templateUrl: './users-table.component.html',
   styleUrl: './users-table.component.css'
 })
@@ -35,5 +40,7 @@ export class UsersTableComponent {
       this.users = this.users.filter(user => user.id !== id);
     });
   }
+
+  
   
 }
