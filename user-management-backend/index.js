@@ -2,94 +2,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const pool = require('./database');
 const cors = require('cors');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
 const fs = require('fs');
 
-const { generateToken, authenticateToken } = require('./JwtUtils');
 
 const app = express();
-app.use(cors()); // Enable CORS for all routes
+app.use(cors());
 app.use(bodyParser.json());
 
-
-
-/*
-   /register endpoint:
-   - Checks for an existing valid JWT to authorize the registration.
-   - Validates input for username and password.
-   - Checks if the username already exists in the database.
-   - If it exists, returns an error.
-   - If it doesn't, hashes the password and adds the new admin user to the database.
-
-*/
-
-// app.post('/register', authenticateToken, async (req, res) => {
-//     try {
-
-//         // Validate the input from request body
-//         const { username, password } = req.body;
-
-//         if (!username || !password) {
-//             return res.status(400).json({ error: 'Username and password are required' });
-//         }
-
-//         // Check if the username already exists
-//         const userExists = await pool.query('SELECT * FROM admin_user WHERE username = $1', [username]);
-//         if (userExists.rows.length > 0) {
-//             return res.status(400).json({ error: 'Username already exists' });
-//         }
-
-//         // Hash the password
-//         const saltRounds = 10;
-//         const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-//         // Insert the new admin user into the database
-//         const newUser = await pool.query(
-//             'INSERT INTO admin_user (username, password) VALUES ($1, $2) RETURNING *',
-//             [username, hashedPassword]
-//         );
-
-//         res.sendStatus(201);
-        
-
-//     } catch (err) {
-//         console.error(err.message);
-//         res.status(500).json({ error: 'Internal server error' });
-//     }
-// });
-
-
-
-// /*  login Endpoint:
-//     - Accepts username and password.
-//     - Queries the database for the username.
-//     - If not found, returns 401 Unauthorized.
-//     - If found, compares the provided password with the stored hashed password.
-//     - If the password matches, generates and returns a JWT.
-//     - If it doesn't match, returns 401 Unauthorized.
-// */
-
-// app.post('/login', async (req, res) => {
-//     try {
-//         const { username, password } = req.body;
-//         const user = await pool.query('SELECT * FROM admin_user WHERE username = $1', [username]);
-
-//         if (user.rows.length > 0) {
-//             const validPassword = await bcrypt.compare(password, user.rows[0].password);
-//             if (!validPassword) return res.status(401).send('Invalid Credentials');
-
-//             // const token = jwt.sign({ id: user.rows[0].id }, { key: fs.readFileSync('private.pem'), passphrase: 'yourPassphrase' }, { algorithm: 'RS256', expiresIn: '1h' });
-//             const token = generateToken({ username: user.username });
-//             res.json({ token });
-//         } else {
-//             res.status(401).send('Invalid Credentials');
-//         }
-//     } catch (err) {
-//         console.error(err.message);
-//         res.status(500).send('Server Error');
-//     }
-// });
 
 // Get all users
 app.get('/users', async (req, res) => {
@@ -178,7 +97,6 @@ app.delete('/users/:id', async (req, res) => {
 });
 
 app.listen(3001, () => {
-    console.log(generateToken({username:"admin"}))
     console.log('Server has started on port 3001');
 });
 
